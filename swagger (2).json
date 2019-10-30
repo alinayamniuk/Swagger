@@ -1,0 +1,749 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Lab6. Simple service for tracking your money",
+    "version": "1.0.0",
+    "title": "Family budget",
+    "contact": {
+      "email": "alinayamniuk@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "budget",
+      "description": "Track your family budget"
+    },
+    {
+      "name": "user",
+      "description": "Operations about user"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/budget": {
+      "post": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Create a new family",
+        "description": "",
+        "operationId": "budget",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Family object that needs to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Budget"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "family_budget_auth": [
+              "write:budget",
+              "read:budget"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Update an existing family budget",
+        "description": "",
+        "operationId": "update_family_budget",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Family object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Budget"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Budget not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        },
+        "security": [
+          {
+            "family_budget_auth": [
+              "write:budget",
+              "read:budget"
+            ]
+          }
+        ]
+      }
+    },
+    "/budget/find_all_created": {
+      "get": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Finds all created family budget",
+        "operationId": "find_all_created",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Budget"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "family_budget_auth": [
+              "write:budget",
+              "read:budget"
+            ]
+          }
+        ]
+      }
+    },
+    "/budget/find_all_connected": {
+      "get": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Finds all connected budget",
+        "operationId": "find_all_connected",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Budget"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "family_budget_auth": [
+              "write:budget",
+              "read:budget"
+            ]
+          }
+        ]
+      }
+    },
+    "/budget/getBudgetById": {
+      "get": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Find budget by family_id",
+        "description": "Returns a single budget",
+        "operationId": "getBudgetById",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of budget to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Budget"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Budget not found"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Updates an Budget",
+        "description": "",
+        "operationId": "update_family_budget_id",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "family_id",
+            "in": "path",
+            "description": "ID of family that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "money",
+            "in": "formData",
+            "description": "Updated family budget",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "income",
+            "in": "formData",
+            "description": "Updated income of the family",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "expenses",
+            "in": "formData",
+            "description": "Updated expenses of the family",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "added_users",
+            "in": "formData",
+            "description": "Users id's to add",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "deleted_users",
+            "in": "formData",
+            "description": "Users id's to remove",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "family_budget_auth": [
+              "write:budget",
+              "read:budget"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "budget"
+        ],
+        "summary": "Deletes an family budget",
+        "description": "",
+        "operationId": "delete_family budget",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Family id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Budget not found"
+          }
+        },
+        "security": [
+          {
+            "family_budget_auth": [
+              "write:budget",
+              "read:budget"
+            ]
+          }
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "create_user",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/createWithArray": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithArrayInput",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/createWithList": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Creates list of users with given input array",
+        "description": "",
+        "operationId": "createUsersWithListInput",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List of user object",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "The user name for login",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "The password for login in clear text",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            },
+            "headers": {
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              },
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs out current logged in user session",
+        "description": "",
+        "operationId": "logoutUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by user name",
+        "description": "",
+        "operationId": "getUserByName",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Update user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "name that need to be updated",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Updated user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid user supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "The name that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "family_budget_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://family_budget.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:budget": "modify budget in your account",
+        "read:budget": "read your budget"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "own_money": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "own_income": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "own_expenses": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "userStatus": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "active",
+            "banned",
+            "temporary_blocked"
+          ]
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Budget": {
+      "type": "object",
+      "required": [
+        "number_of_members",
+        "income",
+        "expenses",
+        "money",
+        "user_id"
+      ],
+      "properties": {
+        "family_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "number_of_members": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "money": {
+          "type": "integer",
+          "format": "int64",
+          "example": "20000"
+        },
+        "income": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "expenses": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "members_of_family": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          },
+          "description": "array of users that are belong to the family"
+        }
+      },
+      "xml": {
+        "name": "Budget"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
